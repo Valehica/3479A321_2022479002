@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:laboratorio1_inicioflutter/pages/home_page.dart';
+import 'package:laboratorio1_inicioflutter/pages/detail_page.dart';
+//import 'package:laboratorio1_inicioflutter/pages/about_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,15 +17,19 @@ class MyApp extends StatelessWidget {
     logger.d("Logger is working!");
 
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        fontFamily: 'Mine',
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 255, 227, 46)),
-        useMaterial3: true,
-        textTheme: const TextTheme(displayLarge: TextStyle(fontFamily: 'Mine')),
-      ),
-      home: const MyHomePage(title: 'Mi primera aplicación'),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          fontFamily: 'Mine',
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromARGB(255, 255, 227, 46)),
+          useMaterial3: true,
+          textTheme:
+              const TextTheme(displayLarge: TextStyle(fontFamily: 'Mine')),
+        ),
+        home: const MyHomePage(title: 'CONTADOR APLICACION'),
+        routes: {
+          '/detail': (context) => const DetailPage(),
+          //'/about': (context) => const AboutPage(),
+        });
   }
 }

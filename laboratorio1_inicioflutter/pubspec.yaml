@@ -64,7 +64,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/icon/vaca.svg 
+    - assets/icon/vaca.svg
+    - assets/icon/ganar_icon.svg
+    - assets/icon/perder_icon.svg
+    - assets/icon/reset_icon.svg 
 
   fonts:
     - family: Mine
