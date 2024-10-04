@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'detail_page.dart';
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({super.key, required this.title});
-
-  final String title;
+  const AboutPage({super.key});
 
   @override
   State<AboutPage> createState() => _AboutPageState();
@@ -33,12 +32,12 @@ class _AboutPageState extends State<AboutPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Acción del botón
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Acción del botón de About')),
-                );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const DetailPage()));
               },
-              child: const Text('Contacto'),
+              child: const Text('Volver a detalles'),
             ),
           ],
         ),

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-//import 'about_page.dart';
+import 'package:laboratorio1_inicioflutter/pages/detail_page.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -76,16 +73,19 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         FloatingActionButton(
+          heroTag: null,
           onPressed: _reduceCounter,
           tooltip: 'Restar',
           child: const Icon(Icons.remove),
         ),
         FloatingActionButton(
+          heroTag: null,
           onPressed: _incrementCounter,
           tooltip: 'Incrementar',
           child: const Icon(Icons.add),
         ),
         FloatingActionButton(
+          heroTag: null,
           onPressed: _zeroCounter,
           tooltip: 'Resetear',
           child: SvgPicture.asset(
@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Text('Home'),
       ),
       body: Center(
         //creacion de la card
@@ -151,10 +151,10 @@ class _MyHomePageState extends State<MyHomePage> {
               // Botón para ir a la página de detalles
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/detail',
-                  );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const DetailPage()));
                 },
                 child: const Text('Ir a Detail'),
               ),
