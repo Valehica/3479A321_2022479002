@@ -12,28 +12,12 @@ class DetailPage extends StatelessWidget {
         title: const Text('Detalles'),
       ),
       body: Center(
-          child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MyHomePage()));
-              },
-              child: const Text('Volver a home')),
-          const SizedBox(
-            width: 20,
-          ),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AboutPage()));
-              },
-              child: const Text('Ir a sobre mí'))
-        ],
-      )),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Text(
+          'Pagina de detalles',
+          style: TextStyle(fontSize: 24),
+        ),
+      ])),
     );
   }
 }

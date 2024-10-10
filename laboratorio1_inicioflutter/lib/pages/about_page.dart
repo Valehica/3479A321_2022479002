@@ -30,15 +30,6 @@ class _AboutPageState extends State<AboutPage> {
               style: TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DetailPage()));
-              },
-              child: const Text('Volver a detalles'),
-            ),
           ],
         ),
       ),
