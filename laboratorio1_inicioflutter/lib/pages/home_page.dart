@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:laboratorio1_inicioflutter/pages/about_page.dart';
 import 'package:laboratorio1_inicioflutter/pages/auditoria_page.dart';
 import 'package:laboratorio1_inicioflutter/pages/detail_page.dart';
+import 'package:provider/provider.dart';
+import 'package:laboratorio1_inicioflutter/provider/app_data.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -12,36 +14,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  bool _hasAccessed = false;
+
   String iconVaca = 'assets/icon/vaca.svg';
   String iconGanar = 'assets/icon/ganar_icon.svg';
   String iconPerder = 'assets/icon/perder_icon.svg';
   String iconReset = 'assets/icon/reset_icon.svg';
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _reduceCounter() {
-    setState(() {
-      _counter--;
-    });
-  }
-
-  void _zeroCounter() {
-    setState(() {
-      _counter = 0;
-    });
-  }
-
-  String _descubrirIcono() {
+  String _descubrirIcono(int counter) {
     String icon;
 
-    if (_counter == 5) {
+    if (counter == 5) {
       icon = iconPerder;
-    } else if (_counter == 10) {
+    } else if (counter == 10) {
       icon = iconGanar;
     } else {
       icon = iconVaca;
@@ -50,20 +35,20 @@ class _MyHomePageState extends State<MyHomePage> {
     return icon;
   }
 
-  String _mostrarMensaje() {
-    if (_counter == 5) {
+  String _mostrarMensaje(int counter) {
+    if (counter == 5) {
       return 'PERDISTE!';
-    } else if (_counter == 10) {
+    } else if (counter == 10) {
       return 'GANASTE!';
     } else {
       return 'Tu contador esta en:';
     }
   }
 
-  double _tamanoLetra() {
-    if (_counter == 5) {
+  double _tamanoLetra(int counter) {
+    if (counter == 5) {
       return 24;
-    } else if (_counter == 10) {
+    } else if (counter == 10) {
       return 24;
     } else {
       return 18;
@@ -76,19 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         FloatingActionButton(
           heroTag: null,
-          onPressed: _reduceCounter,
+          onPressed: context.read<AppData>().reduceCounter,
           tooltip: 'Restar',
           child: const Icon(Icons.remove),
         ),
         FloatingActionButton(
           heroTag: null,
-          onPressed: _incrementCounter,
+          onPressed: context.read<AppData>().incrementCounter,
           tooltip: 'Incrementar',
           child: const Icon(Icons.add),
         ),
         FloatingActionButton(
           heroTag: null,
-          onPressed: _zeroCounter,
+          onPressed: context.read<AppData>().zeroCounter,
           tooltip: 'Resetear',
           child: SvgPicture.asset(
             iconReset,
@@ -102,6 +87,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appData = context.watch<AppData>();
+    if (!_hasAccessed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        appData.addAction('Acceso a la pantalla principal');
+        _hasAccessed = true;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -179,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SvgPicture.asset(
-                    _descubrirIcono(),
+                    _descubrirIcono(appData.counter),
                     width: 50.0,
                     height: 50.0,
                   ),
@@ -189,12 +182,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
               //contador
               Text(
-                _mostrarMensaje(),
-                style: TextStyle(fontSize: _tamanoLetra()),
+                _mostrarMensaje(appData.counter),
+                style: TextStyle(fontSize: _tamanoLetra(appData.counter)),
               ),
               const SizedBox(height: 10),
               Text(
-                '$_counter',
+                '${appData.counter}',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 20),
