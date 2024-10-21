@@ -5,6 +5,8 @@ import 'package:laboratorio1_inicioflutter/pages/auditoria_page.dart';
 import 'package:laboratorio1_inicioflutter/pages/detail_page.dart';
 import 'package:provider/provider.dart';
 import 'package:laboratorio1_inicioflutter/provider/app_data.dart';
+import 'package:laboratorio1_inicioflutter/pages/preferencias_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -20,6 +22,25 @@ class _MyHomePageState extends State<MyHomePage> {
   String iconGanar = 'assets/icon/ganar_icon.svg';
   String iconPerder = 'assets/icon/perder_icon.svg';
   String iconReset = 'assets/icon/reset_icon.svg';
+
+  String _userName = '';
+  int _counter = 0;
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userName = prefs.getString('userName') ?? '';
+      _counter = prefs.getInt('counter') ?? 0;
+      print('Counter value $_counter is loaded');
+      print('Username value $_userName is loaded');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
 
   String _descubrirIcono(int counter) {
     String icon;
@@ -55,25 +76,37 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void incrementCounter() {
+    _counter++;
+  }
+
+  void reduceCounter() {
+    _counter--;
+  }
+
+  void zeroCounter() {
+    _counter = 0;
+  }
+
   Widget _widgetBotones() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         FloatingActionButton(
           heroTag: null,
-          onPressed: context.read<AppData>().reduceCounter,
+          onPressed: reduceCounter,
           tooltip: 'Restar',
           child: const Icon(Icons.remove),
         ),
         FloatingActionButton(
           heroTag: null,
-          onPressed: context.read<AppData>().incrementCounter,
+          onPressed: incrementCounter,
           tooltip: 'Incrementar',
           child: const Icon(Icons.add),
         ),
         FloatingActionButton(
           heroTag: null,
-          onPressed: context.read<AppData>().zeroCounter,
+          onPressed: zeroCounter,
           tooltip: 'Resetear',
           child: SvgPicture.asset(
             iconReset,
@@ -131,6 +164,16 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Preferencias'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PreferenciasPage()),
+                );
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.person),
               title: Text('Sobre mi'),
               onTap: () {
@@ -167,12 +210,17 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.all(15.0), //espacio de dentro de la card
             child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
               //desde aca se escribe para dentro de card
-
+              const SizedBox(height: 20),
+              Text(
+                'BIENVENIDO $_userName}',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SvgPicture.asset(
-                    _descubrirIcono(appData.counter),
+                    _descubrirIcono(_counter),
                     width: 50.0,
                     height: 50.0,
                   ),
@@ -182,12 +230,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
               //contador
               Text(
-                _mostrarMensaje(appData.counter),
-                style: TextStyle(fontSize: _tamanoLetra(appData.counter)),
+                _mostrarMensaje(_counter),
+                style: TextStyle(fontSize: _tamanoLetra(_counter)),
               ),
               const SizedBox(height: 10),
               Text(
-                '${appData.counter}',
+                '${_counter}',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 20),
@@ -212,5 +260,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  void _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('userName', _userName); // Guardar nombre de usuario
+    prefs.setInt('counter', _counter); // Guardar valor del contador
   }
 }
